@@ -19,6 +19,7 @@ type RouteSelectionConditionFunction func(httpRequest *http.Request) bool
 
 // Route binds a HTTP Method,Path,Consumes combination to a RouteFunction.
 type Route struct {
+	Id string
 	Method   string
 	Produces []string
 	Consumes []string
@@ -68,6 +69,7 @@ func (r *Route) wrapRequestResponse(httpWriter http.ResponseWriter, httpRequest 
 	wrappedResponse := NewResponse(httpWriter)
 	wrappedResponse.requestAccept = httpRequest.Header.Get(HEADER_Accept)
 	wrappedResponse.routeProduces = r.Produces
+	wrappedRequest.CurrentRoute = r
 	return wrappedRequest, wrappedResponse
 }
 

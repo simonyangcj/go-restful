@@ -17,6 +17,7 @@ import (
 
 // RouteBuilder is a helper to construct Routes.
 type RouteBuilder struct {
+	id string
 	rootPath    string
 	currentPath string
 	produces    []string
@@ -49,6 +50,11 @@ type RouteBuilder struct {
 //		func Returns500(b *RouteBuilder) {
 //			b.Returns(500, "Internal Server Error", restful.ServiceError{})
 //		}
+func (b *RouteBuilder) Id(id string) *RouteBuilder {
+	b.id = id
+	return b
+}
+
 func (b *RouteBuilder) Do(oneArgBlocks ...func(*RouteBuilder)) *RouteBuilder {
 	for _, each := range oneArgBlocks {
 		each(b)
@@ -276,6 +282,7 @@ func (b *RouteBuilder) Build() Route {
 		operationName = nameOfFunction(b.function)
 	}
 	route := Route{
+		Id:						b.id,
 		Method:                 b.httpMethod,
 		Path:                   concatPath(b.rootPath, b.currentPath),
 		Produces:               b.produces,
